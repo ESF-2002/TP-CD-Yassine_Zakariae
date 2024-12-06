@@ -1,4 +1,4 @@
-# Hello!! This is a spring boot app!
+# Hello!! This is a spring boot app!!
 
 This app is simple. It connects to a postgres database and says if the database works.
 
@@ -38,4 +38,5 @@ The `.jar` file will be available in `target` directory.
 ```
 
 The static site files will be available in `target/reports/apidocs`.
+
 
