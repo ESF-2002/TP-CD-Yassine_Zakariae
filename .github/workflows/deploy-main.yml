@@ -50,6 +50,9 @@ jobs:
       - name: Build documentation
         run: ./mvnw javadoc:javadoc
 
+      - name: List generated files in target/site
+        run: ls -R target/site
+
       - name: Upload documentation artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -62,7 +65,7 @@ jobs:
       - name: Deploy documentation to Netlify
         run: |
           echo "Deploying documentation to Netlify..."
-          netlify deploy --dir target/site/apidocs --prod \
+          netlify deploy --dir target/site --prod \
           --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} \
           --site ${{ secrets.NETLIFY_SITE_ID }}
 
