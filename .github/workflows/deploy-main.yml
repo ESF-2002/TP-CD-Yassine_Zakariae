@@ -53,8 +53,8 @@ jobs:
       - name: Build documentation
         run: ./mvnw javadoc:javadoc
 
-      - name: List generated files in target/reports/apidocs
-        run: ls -R target/reports/apidocs
+      - name: List target directory
+        run: ls -R target
 
       - name: Upload documentation artifacts
         uses: actions/upload-artifact@v3
