@@ -34,56 +34,57 @@ jobs:
         run: docker build --platform linux/amd64 -t yassine659/application-java:main .
 
   deploy-docs-and-code:
-  name: "Deploying Documentation and Code 🚀"
-  runs-on: ubuntu-latest
-  needs: [tests, docker-build]
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    name: "Deploying Documentation and Code 🚀"
+    runs-on: ubuntu-latest
+    needs: [tests, docker-build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        java-version: '21'
-        distribution: 'temurin'
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-    - name: Make mvnw executable
-      run: chmod +x mvnw
+      - name: Make mvnw executable
+        run: chmod +x mvnw
 
-    - name: Build documentation
-      run: ./mvnw javadoc:javadoc
+      - name: Build documentation
+        run: ./mvnw javadoc:javadoc
 
-    - name: Verify the documentation folder exists
-      run: |
-        if [ ! -d "target/reports/apidocs" ]; then
-          echo "Error: The documentation folder does not exist."
-          exit 1
-        fi
-        echo "Documentation folder exists."
+      # Vérification de la présence des fichiers générés
+      - name: Verify the documentation folder exists
+        run: |
+          if [ ! -d "target/reports/apidocs" ]; then
+            echo "Error: The documentation folder does not exist."
+            exit 1
+          fi
+          echo "Documentation folder exists."
 
-    - name: List target directory
-      run: ls -R target
+      - name: List target directory
+        run: ls -R target
 
-    - name: Upload documentation artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: apidocs
-        path: target/reports/apidocs
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: apidocs
+          path: target/reports/apidocs
 
-    - name: Install Netlify CLI
-      run: npm install -g netlify-cli
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
 
-    - name: Deploy documentation to Netlify
-      run: |
-        echo "Deploying documentation to Netlify..."
-        netlify deploy --dir target/reports/apidocs --prod \
-        --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} \
-        --site ${{ secrets.NETLIFY_SITE_ID }}
+      - name: Deploy documentation to Netlify
+        run: |
+          echo "Deploying documentation to Netlify..."
+          netlify deploy --dir target/reports/apidocs --prod \
+          --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} \
+          --site ${{ secrets.NETLIFY_SITE_ID }}
 
-    - name: Deploy to Render.com
-      run: |
-        echo "Triggering Render.com deployment..."
-        curl -X POST -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-        -H "Content-Type: application/json" \
-        -d '{"clearCache": true}' \
-        https://api.render.com/deploy/${{ secrets.RENDER_SERVICE_ID }}
+      - name: Deploy to Render.com
+        run: |
+          echo "Triggering Render.com deployment..."
+          curl -X POST -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"clearCache": true}' \
+          https://api.render.com/deploy/${{ secrets.RENDER_SERVICE_ID }}
