@@ -1,10 +1,11 @@
-name: Deploy Main Branch
-run-name: ${{ github.actor }} deploying Main Branch 🚀
+name: Deployment of the Main Branch 🚀
+run-name: "${{ github.actor }} - Deploying Main Branch 🚀 at ${{ github.event.head_commit.timestamp }}"
 
 on: [push]
 
 jobs:
   tests:
+    name: Run Tests 🧪
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,7 +23,8 @@ jobs:
       - name: Run unit tests
         run: ./mvnw test
 
-  docker-build:
+  build-docker-image:
+    name: Build Docker Image 🚀
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,7 +33,8 @@ jobs:
       - name: Build Docker image
         run: docker build --platform linux/amd64 -t yassine659/application-java:main .
 
-  documentation-and-deploy:
+  deploy-docs-and-code:
+    name: "Deploying Documentation and Code 🚀"
     runs-on: ubuntu-latest
     needs: [tests, docker-build]
     steps:
