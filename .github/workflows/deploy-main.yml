@@ -23,7 +23,7 @@ jobs:
       - name: Run unit tests
         run: ./mvnw test
 
-  build-docker-image:
+  docker-build:
     name: Build Docker Image 🚀
     runs-on: ubuntu-latest
     steps:
