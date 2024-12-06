@@ -1,3 +1,5 @@
+![Statut de workflow](https://github.com/ESF-2002/TP-CD-Yassine_Zakariae/actions/workflows/main.yml/badge.svg)
+
 # Hello!! This is a spring boot app!
 
 This app is simple. It connects to a postgres database and says if the database works.
