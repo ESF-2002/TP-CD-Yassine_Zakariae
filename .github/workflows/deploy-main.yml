@@ -53,14 +53,14 @@ jobs:
       - name: Build documentation
         run: ./mvnw javadoc:javadoc
 
-      - name: List generated files in target/site
-        run: ls -R target/site
+      - name: List generated files in target/reports/apidocs
+        run: ls -R target/reports/apidocs
 
       - name: Upload documentation artifacts
         uses: actions/upload-artifact@v3
         with:
           name: apidocs
-          path: target/site/apidocs 
+          path: target/reports/apidocs
 
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
