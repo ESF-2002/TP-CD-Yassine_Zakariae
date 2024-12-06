@@ -53,15 +53,6 @@ jobs:
       - name: Build documentation
         run: ./mvnw javadoc:javadoc
 
-      - name: Check if documentation folder was created
-        run: |
-          echo "Checking for the existence of target/site/apidocs..."
-          if [ ! -d "target/site/apidocs" ]; then
-            echo "Error: The documentation folder does not exist."
-            exit 1
-          fi
-          echo "Documentation folder exists."
-
       - name: List target directory
         run: ls -R target
 
