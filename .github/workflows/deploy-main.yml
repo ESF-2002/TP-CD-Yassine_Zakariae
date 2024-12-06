@@ -48,23 +48,28 @@ jobs:
         run: chmod +x mvnw
 
       - name: Build documentation
-  run: ./mvnw javadoc:javadoc
+        run: ./mvnw javadoc:javadoc
 
-- name: List target/site content
-  run: ls -R target/site
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: apidocs
+          path: target/site/apidocs 
 
-- name: Upload documentation artifacts
-  uses: actions/upload-artifact@v3
-  with:
-    name: apidocs
-    path: target/site/apidocs
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
 
-- name: Install Netlify CLI
-  run: npm install -g netlify-cli
+      - name: Deploy documentation to Netlify
+        run: |
+          echo "Deploying documentation to Netlify..."
+          netlify deploy --dir target/site/apidocs --prod \
+          --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} \
+          --site ${{ secrets.NETLIFY_SITE_ID }}
 
-- name: Deploy documentation to Netlify
-  run: |
-    echo "Deploying documentation to Netlify..."
-    netlify deploy --dir target/site/apidocs --prod \
-    --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} \
-    --site ${{ secrets.NETLIFY_SITE_ID }}
+      - name: Deploy to Render.com
+        run: |
+          echo "Triggering Render.com deployment..."
+          curl -X POST -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"clearCache": true}' \
+          https://api.render.com/deploy/${{ secrets.RENDER_SERVICE_ID }}
